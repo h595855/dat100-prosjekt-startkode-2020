@@ -55,35 +55,57 @@ public class ShowRoute extends EasyGraphics {
 	
 		double ystep;
 		
-		// TODO - START
+		double maxlat = GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints));
+		double minlat = GPSUtils.findMin(GPSUtils.getLatitudes(gpspoints));
 		
-		throw new UnsupportedOperationException(TODO.method());
-
-		// TODO - SLUTT
+		ystep = MAPYSIZE / (Math.abs(maxlat - minlat));
+		
+		return ystep;
 		
 	}
 
 	public void showRouteMap(int ybase) {
 
-		// TODO - START
+		int[] xTab = new int[gpspoints.length];
+		int[] yTab = new int[gpspoints.length];
+		int minX = (int)( GPSUtils.findMin(GPSUtils.getLongitudes(gpspoints))* xstep());
+		int maxY = (int)( GPSUtils.findMax(GPSUtils.getLatitudes(gpspoints))* ystep());
+		setColor(0,250,0);
 		
-		throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - SLUTT
+		for(int i = 0; i < gpspoints.length; i++) {
+			double bredde = gpspoints[i].getLatitude();
+			double lengde = gpspoints[i].getLongitude();
+			xTab[i] = (int)(lengde * xstep());
+			yTab[i] = (int)(bredde * ystep());
+			fillCircle(xTab[i] - minX  + MARGIN, maxY - yTab[i] + MARGIN, 4);	
+			
+		}
+		for(int i = 1; i < gpspoints.length; i++) {
+			drawLine(xTab[i-1] - minX + MARGIN, maxY - yTab[i-1] + MARGIN, xTab[i] - minX + MARGIN, maxY - yTab[i] + MARGIN );
+		}
+	
 	}
 
 	public void showStatistics() {
 
 		int TEXTDISTANCE = 20;
-
+		String tid = "Total Time:      " + GPSUtils.formatTime(gpscomputer.totalTime());
+		String dis = "Total Distance:  " + GPSUtils.formatDouble(gpscomputer.totalDistance()) + " m";
+		String ele = "Total Elevation: " + GPSUtils.formatDouble(gpscomputer.totalElevation()) + " m";
+		String max = "Max Speed:       " + GPSUtils.formatDouble(gpscomputer.maxSpeed()) + " km/h";
+		String arg = "Average Speed:   " + GPSUtils.formatDouble(gpscomputer.averageSpeed()) + " km/h";
+		String eng = "Energy:          " + GPSUtils.formatDouble(gpscomputer.totalKcal(80.0)) + " kcal";
+		
 		setColor(0,0,0);
 		setFont("Courier",12);
+		drawString(tid, TEXTDISTANCE, TEXTDISTANCE);
+		drawString(dis, TEXTDISTANCE, TEXTDISTANCE*2);
+		drawString(ele, TEXTDISTANCE, TEXTDISTANCE*3);
+		drawString(max, TEXTDISTANCE, TEXTDISTANCE*4);
+		drawString(arg, TEXTDISTANCE, TEXTDISTANCE*5);
+		drawString(eng, TEXTDISTANCE, TEXTDISTANCE*6);
 		
-		// TODO - START
 		
-		throw new UnsupportedOperationException(TODO.method());
-		
-		// TODO - SLUTT;
 	}
 
 }
