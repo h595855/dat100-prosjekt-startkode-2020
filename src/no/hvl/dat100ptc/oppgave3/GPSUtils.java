@@ -69,21 +69,19 @@ public class GPSUtils {
 
 		double d, a, b;
 		double latitude1, longitude1, latitude2, longitude2;
-		double O, Æ, Y, X;
+		double difflat, difflong;
 
-		// TODO - START
-		latitude1 = gpspoint1.getLatitude();
-		latitude2 = gpspoint2.getLatitude();
-		longitude1 = gpspoint1.getLongitude();
-		longitude2= gpspoint2.getLongitude();
+		latitude1 = toRadians(gpspoint1.getLatitude());
+		latitude2 = toRadians(gpspoint2.getLatitude());
 		
-		O = toRadians(latitude1);
-		Æ = toRadians(latitude2);
+		longitude1 = toRadians(gpspoint1.getLongitude());
+		longitude2 = toRadians(gpspoint2.getLongitude());
 		
-		Y = toRadians(latitude2-latitude1);
-		X = toRadians(longitude2-longitude1);
+		difflat = latitude2 - latitude1;
+		difflong = longitude2 - longitude1;
+	
 		
-		a = pow(sin(Y/2),2) + cos(O) * cos(Æ) * pow(sin(X/2),2);
+		a = pow(sin(difflat/2),2) + cos(latitude1) * cos(latitude2) * pow(sin(difflong/2),2);
 		b = 2 * atan2(sqrt(a),sqrt((1-a)));
 		d = R * b;
 		
